@@ -41,9 +41,9 @@ SET(libzzipmmapped_headers mmapped.h memdisk.h fetch.h)
 SET(libzzipfseeko_SOURCES fseeko.c fetch.c)
 SET(libzzipfseeko_headers fseeko.h fetch.h)
 
-ADD_LIBRARY(zzipmapped_la STATIC ${libzzipmmapped_SOURCES} ${libzzipmmapped_headers} ${PROJECT_BINARY_DIR}/config.h)
-ADD_LIBRARY(zzipfseeko_la STATIC ${libzzipfseeko_SOURCES} ${libzzipfseeko_headers} ${PROJECT_BINARY_DIR}/config.h)
-ADD_LIBRARY(zzip_la STATIC ${libzzip_SOURCES} ${libzzip_headers} ${PROJECT_BINARY_DIR}/config.h)
+ADD_LIBRARY(zzipmapped_la STATIC ${libzzipmmapped_SOURCES} ${libzzipmmapped_headers})
+ADD_LIBRARY(zzipfseeko_la STATIC ${libzzipfseeko_SOURCES} ${libzzipfseeko_headers})
+ADD_LIBRARY(zzip_la STATIC ${libzzip_SOURCES} ${libzzip_headers})
 
 TARGET_LINK_LIBRARIES(zzipmapped_la ${ZLIB_LIBRARIES})
 TARGET_LINK_LIBRARIES(zzipfseeko_la ${ZLIB_LIBRARIES})

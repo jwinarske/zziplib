@@ -4,6 +4,9 @@
 #define ZZIP_SIZEOF_INT @SIZEOF_INT@
 #define ZZIP_SIZEOF_LONG @SIZEOF_LONG@
 
+#cmakedefine ZZIP_VERSION
+#cmakedefine ZZIP_PACKAGE
+
 #cmakedefine ZZIP_HAVE_BYTESWAP_H
 #cmakedefine ZZIP_HAVE_DIRECT_H
 #cmakedefine ZZIP_HAVE_DIRENT_H

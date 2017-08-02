@@ -1,5 +1,6 @@
 
-SET(ZZIP_VER "0.13.x")
+SET(ZZIP_VERSION "0.13.x")
+SET(ZZIP_PACKAGE "v13")
 
 INCLUDE(GNUInstallDirs)
 INCLUDE(CheckIncludeFiles)
@@ -76,7 +77,7 @@ CHECK_INCLUDE_FILES(endian.h ZZIP_HAVE_ENDIAN_H)
 
 CONFIGURE_FILE (
   "${CMAKE_MODULE_PATH}/config.h.in"
-  "${PROJECT_BINARY_DIR}/config.h"
+  "${CMAKE_SOURCE_DIR}/zzip/_config.h"
   )
   
 IF (WIN32 AND CMAKE_SYSTEM_VERSION)
@@ -93,10 +94,10 @@ if(MSVC)
 #  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /wd4100 /wd4996 /wd4244 /wd4706 /wd4702 /wd4127 /wd4701")
 elseif(UNIX)
   set(CMAKE_C_COMPILER clang)
-  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fomit-frame-pointer -Wwrite-strings")
-  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wstrict-prototypes -Wpointer-arith")
-  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wsign-compare -Wmissing-declarations -Wdeclaration-after-statement")
-  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Werror-implicit-function-declaration -Wstrict-aliasing -Warray-bounds")
+#  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fomit-frame-pointer -Wwrite-strings")
+#  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wstrict-prototypes -Wpointer-arith")
+#  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wsign-compare -Wmissing-declarations -Wdeclaration-after-statement")
+#  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Werror-implicit-function-declaration -Wstrict-aliasing -Warray-bounds")
 endif()
 
 
