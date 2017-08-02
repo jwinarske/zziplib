@@ -97,7 +97,6 @@ elseif(UNIX)
   set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wstrict-prototypes -Wpointer-arith")
   set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wsign-compare -Wmissing-declarations -Wdeclaration-after-statement")
   set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Werror-implicit-function-declaration -Wstrict-aliasing -Warray-bounds")
-#  MESSAGE(STATUS "CMAKE_C_FLAGS = ${CMAKE_C_FLAGS}")
 endif()
 
 

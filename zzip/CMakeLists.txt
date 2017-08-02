@@ -20,17 +20,17 @@ SET(libzzip_SOURCES
 )
 
 SET(libzzip_headers
-	stdint.h
-	file.h
-	plugin.h
-	lib.h
-	zzip.h
-	zzip32.h
+    stdint.h
+    file.h
+    plugin.h
+    lib.h
+    zzip.h
+    zzip32.h
     write.h
-	fetch.h
-	format.h
+    fetch.h
+    format.h
     info.h
-	types.h
+    types.h
 )    
 
 INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR})
@@ -41,25 +41,25 @@ SET(libzzipmmapped_headers mmapped.h memdisk.h fetch.h)
 SET(libzzipfseeko_SOURCES fseeko.c fetch.c)
 SET(libzzipfseeko_headers fseeko.h fetch.h)
 
-ADD_LIBRARY(zzipmapped STATIC ${libzzipmmapped_SOURCES} ${libzzipmmapped_headers} ${PROJECT_BINARY_DIR}/config.h)
-ADD_LIBRARY(zzipfseeko STATIC ${libzzipfseeko_SOURCES} ${libzzipfseeko_headers} ${PROJECT_BINARY_DIR}/config.h)
-ADD_LIBRARY(zzip STATIC ${libzzip_SOURCES} ${libzzip_headers} ${PROJECT_BINARY_DIR}/config.h)
+ADD_LIBRARY(zzipmapped_la STATIC ${libzzipmmapped_SOURCES} ${libzzipmmapped_headers} ${PROJECT_BINARY_DIR}/config.h)
+ADD_LIBRARY(zzipfseeko_la STATIC ${libzzipfseeko_SOURCES} ${libzzipfseeko_headers} ${PROJECT_BINARY_DIR}/config.h)
+ADD_LIBRARY(zzip_la STATIC ${libzzip_SOURCES} ${libzzip_headers} ${PROJECT_BINARY_DIR}/config.h)
 
-TARGET_LINK_LIBRARIES(zzipmapped ${ZLIB_LIBRARIES})
-TARGET_LINK_LIBRARIES(zzipfseeko ${ZLIB_LIBRARIES})
-TARGET_LINK_LIBRARIES(zzip ${ZLIB_LIBRARIES} zzipmmapped zzipfseeko)
+TARGET_LINK_LIBRARIES(zzipmapped_la ${ZLIB_LIBRARIES})
+TARGET_LINK_LIBRARIES(zzipfseeko_la ${ZLIB_LIBRARIES})
+TARGET_LINK_LIBRARIES(zzip_la ${ZLIB_LIBRARIES} zzipmmapped_la zzipfseeko_la)
 
-INSTALL (TARGETS zzipmapped
+INSTALL (TARGETS zzipmapped_la
     ARCHIVE DESTINATION lib
     LIBRARY DESTINATION lib
     COMPONENT libraries
 )
-INSTALL (TARGETS zzipfseeko
+INSTALL (TARGETS zzipfseeko_la
     ARCHIVE DESTINATION lib
     LIBRARY DESTINATION lib
     COMPONENT libraries
 )
-INSTALL (TARGETS zzip
+INSTALL (TARGETS zzip_la
     ARCHIVE DESTINATION lib
     LIBRARY DESTINATION lib
     COMPONENT libraries
