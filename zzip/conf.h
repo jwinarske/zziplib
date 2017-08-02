@@ -18,6 +18,7 @@
 
 #if !defined ZZIP_OMIT_CONFIG_H
 # if defined _MSC_VER || defined __BORLANDC__ || defined __WATCOMC__
+#include <zzip/_config.h>
 # include <zzip/_msvc.h>
 # elif defined ZZIP_1_H
 # include "zzip-1.h"

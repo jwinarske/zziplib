@@ -105,7 +105,12 @@ static int unzzip_cat (int argc, char ** argv, int extract)
 	    for (argn=1; argn < argc; argn++)
 	    {
 		if (! _zzip_fnmatch (argv[argn], name, 
-		    FNM_NOESCAPE|FNM_PATHNAME|FNM_PERIOD))
+#ifdef ZZIP_HAVE_FNMATCH_H
+			FNM_NOESCAPE | FNM_PATHNAME | FNM_PERIOD))
+#else
+			NULL
+#endif
+			))
 	        {
 	            FILE* out = stdout;
 	            if (extract) out = create_fopen(name, "w", 1);

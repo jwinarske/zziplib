@@ -101,8 +101,13 @@ static int unzzip_cat (int argc, char ** argv, int extract)
 	    char* name = entry->d_name;
 	    for (argn=1; argn < argc; argn++)
 	    {
-		if (! _zzip_fnmatch (argv[argn], name, 
-		    FNM_NOESCAPE|FNM_PATHNAME|FNM_PERIOD))
+		if (! _zzip_fnmatch (argv[argn], name,
+#ifdef ZZIP_HAVE_FNMATCH_H
+			 FNM_NOESCAPE|FNM_PATHNAME|FNM_PERIOD
+#else
+			 NULL
+#endif
+		))
 	        {
 	             FILE* out = stdout;
 	             char* zip_name = argv[1];

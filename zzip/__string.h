@@ -12,6 +12,7 @@
 #elif defined ZZIP_HAVE_STRINGS_H
 #include <strings.h>
 #endif
+#include <stdlib.h>
 
 
 #if defined ZZIP_HAVE_STRNDUP || defined strndup
@@ -24,7 +25,7 @@ _zzip_strndup(char const *p, size_t maxlen)
 {
     if (p == NULL)
     {
-       return p;
+       return (char *)p;
     } else 
     {
         size_t len = strnlen(p, maxlen);

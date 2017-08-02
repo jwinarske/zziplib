@@ -29,9 +29,7 @@ static const char usage[] =
 int 
 main (int argc, char ** argv)
 {
-    int argn;
     int exitcode = 0;
-    ZZIP_DIR * dir;
 
     if (argc <= 1 || ! strcmp (argv[1], "--help"))
     {

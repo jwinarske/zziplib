@@ -302,7 +302,7 @@ zzip_mem_entry_find_extra_block(ZZIP_MEM_ENTRY * entry, short datatype, zzip_siz
             {
                 if (datatype == zzip_extra_block_get_datatype(ext))
                 {
-                    if (blocksize <= zzip_extra_block_get_datasize(ext) + zzip_extra_block_headerlength)
+                    if (blocksize <= (zzip_size_t)(zzip_extra_block_get_datasize(ext) + zzip_extra_block_headerlength))
                     {
                         return ((ZZIP_EXTRA_BLOCK*) ext);
                     }

@@ -1,6 +1,5 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
-
-PROJECT (libs)
+PROJECT (libs C)
 
 SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/../cmake)
 INCLUDE(Zzip)
@@ -31,7 +30,10 @@ SET(libzzip_headers
     types.h
 )    
 
-INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR})
+IF (BUILD_ZLIB)
+INCLUDE_DIRECTORIES (${CMAKE_BINARY_DIR}/zlib)
+ENDIF ()
+INCLUDE_DIRECTORIES (${ZLIB_INCLUDE_DIR} ${CMAKE_SOURCE_DIR})
 
 SET(libzzipmmapped_SOURCES mmapped.c memdisk.c fetch.c)
 SET(libzzipmmapped_headers mmapped.h memdisk.h fetch.h)
@@ -64,4 +66,3 @@ INSTALL (TARGETS zzip_la
 )
 
 set(CPACK_COMPONENTS_ALL libraries)
-

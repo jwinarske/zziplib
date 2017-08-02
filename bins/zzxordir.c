@@ -43,7 +43,7 @@ static zzip_ssize_t xor_read (int f, void* p, zzip_size_t l)
     return r;
 }
 
-static zzip_plugin_io_handlers xor_handlers = { };
+static zzip_plugin_io_handlers xor_handlers = { 0 };
 static zzip_strings_t xor_fileext[] = { ".dat", "", 0 };
 
 int 

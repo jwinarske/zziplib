@@ -4,6 +4,7 @@
 #include <zzip/conf.h>
 
 #  ifdef ZZIP_HAVE_DIRECT_H
+#  include <direct.h>
 #  define _zzip_mkdir(a,b) mkdir(a)
 #  else
 #  define _zzip_mkdir      mkdir
