@@ -8,7 +8,7 @@
 #define PACKAGE_VERSION ""
 
 #define ZZIP_VERSION "@SRC_VER@"
-#if defined(_WIN32) || defined(_WIN32)
+#if defined(_WIN32) || defined(_WIN64)
 #define ZZIP_PACKAGE "zziplib-msvc"
 #else
 #define ZZIP_PACKAGE "zziplib"
