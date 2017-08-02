@@ -222,8 +222,8 @@ zzip_mem_entry_new(ZZIP_DISK * disk, ZZIP_DISK_ENTRY * entry)
         zzip_size_t /*    */ ext2_len = zzip_file_header_get_extras(header);
         char *_zzip_restrict ext2_ptr = zzip_file_header_to_extras(header);
 
-        if (ext1_ptr + ext1_len >= disk->endbuf ||
-            ext2_ptr + ext2_len >= disk->endbuf)
+        if ((void*)(ext1_ptr + ext1_len) >= (void*)(disk->endbuf) ||
+            (void*)(ext2_ptr + ext2_len) >= (void*)(disk->endbuf))
         {
             errno = EBADMSG; /* format error CVE-2017-5978 */
             goto error; /* zzip_mem_entry_free(item); return 0; */

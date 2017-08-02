@@ -387,7 +387,7 @@ zzip_entry_findfirst(FILE * disk)
                     errno = EFBIG;
                     goto error2;
                 }
-                if ((void*)(trailer + 1) > (buffer + mapsize))
+                if ((void*)(trailer + 1) > (void*)(buffer + mapsize))
                 {
                     debug1("disk64 trailer is not complete");
                     errno = EBADMSG;
@@ -713,7 +713,7 @@ zzip_entry_fopen(ZZIP_ENTRY * entry, int takeover)
     file->zlib.zfree = Z_NULL;
 
     ___ zzip_off_t size = file->avail;
-    if (size > sizeof(file->buffer))
+    if (size > (zzip_off_t)sizeof(file->buffer))
         size = sizeof(file->buffer);
     if (fseeko(file->entry->diskfile, file->data + file->dataoff, SEEK_SET) == -1)
     {

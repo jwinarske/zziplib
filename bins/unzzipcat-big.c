@@ -60,7 +60,7 @@ static void makedirs(const char* name)
       }
 }
 
-static FILE* create_fopen(char* name, char* mode, int subdirs)
+static FILE* create_fopen(char* name, const char* mode, int subdirs)
 {
    if (subdirs)
    {
