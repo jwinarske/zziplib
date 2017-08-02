@@ -1,12 +1,12 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
 
-PROJECT (zzip C)
-include (ExternalProject)
-SET (SRC_VER "0.13.65")
-
 IF (NOT CMAKE_BUILD_TYPE)
 SET(CMAKE_BUILD_TYPE "Debug")
 ENDIF ()
+
+PROJECT (zzip C)
+include (ExternalProject)
+SET (SRC_VER "0.13.65")
 
 OPTION (BUILD_ZLIB "Build dependency ZLIB" OFF)
 
@@ -27,6 +27,7 @@ ENDIF ()
 ADD_SUBDIRECTORY(zzip)
 ADD_SUBDIRECTORY(bins)
 ADD_SUBDIRECTORY(test)
+ADD_SUBDIRECTORY(zzipwrap)
 
 IF (BUILD_ZLIB)
 ADD_DEPENDENCIES( zzip_la zlib )

@@ -131,7 +131,7 @@ static int unzzip_cat (int argc, char ** argv, int extract)
 #ifdef ZZIP_HAVE_FNMATCH_H
 			FNM_NOESCAPE | FNM_PATHNAME | FNM_PERIOD))
 #else
-			NULL
+			0
 #endif
 			))
 	    {

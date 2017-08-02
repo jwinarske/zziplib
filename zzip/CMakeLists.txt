@@ -49,6 +49,16 @@ TARGET_LINK_LIBRARIES(zzipmapped_la ${ZLIB_LIBRARIES})
 TARGET_LINK_LIBRARIES(zzipfseeko_la ${ZLIB_LIBRARIES})
 TARGET_LINK_LIBRARIES(zzip_la ${ZLIB_LIBRARIES} zzipmmapped_la zzipfseeko_la)
 
+IF(NOT CYGWIN)
+    # This property causes shared libraries on Linux to have the full version
+    # encoded into their final filename.  We disable this on Cygwin because
+    # it causes cygz-${ZLIB_FULL_VERSION}.dll to be created when cygz.dll
+    # seems to be the default.
+    SET_TARGET_PROPERTIES(zzipmapped_la PROPERTIES VERSION ${SRC_VER})
+    SET_TARGET_PROPERTIES(zzipfseeko_la PROPERTIES VERSION ${SRC_VER})
+    SET_TARGET_PROPERTIES(zzip_la PROPERTIES VERSION ${SRC_VER})
+ENDIF()
+
 INSTALL (TARGETS zzipmapped_la
     ARCHIVE DESTINATION lib
     LIBRARY DESTINATION lib

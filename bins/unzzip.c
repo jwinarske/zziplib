@@ -34,9 +34,7 @@ static int unzzip_help(void)
 int 
 main (int argc, char ** argv)
 {
-    int argn;
     int exitcode = 0;
-    zzip_error_t error;
 
     if (argc <= 1 || ! strcmp (argv[1], "--help"))
     {
