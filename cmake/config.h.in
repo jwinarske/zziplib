@@ -1,11 +1,18 @@
 /* config.h.in.  */
 
+#define PACKAGE_BUGREPORT ""
+#define PACKAGE_NAME ""
+#define PACKAGE_STRING ""
+#define PACKAGE_TARNAME ""
+#define PACKAGE_URL ""
+#define PACKAGE_VERSION ""
+
+#define ZZIP_VERSION "@SRC_VER@"
+#define ZZIP_PACKAGE "zziplib"
+
 #define ZZIP_SIZEOF_SHORT @SIZEOF_SHORT@
 #define ZZIP_SIZEOF_INT @SIZEOF_INT@
 #define ZZIP_SIZEOF_LONG @SIZEOF_LONG@
-
-#cmakedefine ZZIP_VERSION
-#cmakedefine ZZIP_PACKAGE
 
 #cmakedefine ZZIP_HAVE_BYTESWAP_H
 #cmakedefine ZZIP_HAVE_DIRECT_H
@@ -36,4 +43,75 @@
 #cmakedefine ZZIP_HAVE_WINNT_H
 #cmakedefine ZZIP_HAVE_ZLIB_H
 #cmakedefine ZZIP_HAVE_ENDIAN_H
+
+
+/* Define to 1 if you have the ANSI C header files. */
+#undef STDC_HEADERS
+
+/* Define WORDS_BIGENDIAN to 1 if your processor stores words with the most
+   significant byte first (like Motorola and SPARC, unlike Intel). */
+#if defined AC_APPLE_UNIVERSAL_BUILD
+# if defined __BIG_ENDIAN__
+#  define WORDS_BIGENDIAN 1
+# endif
+#else
+# ifndef WORDS_BIGENDIAN
+#  undef WORDS_BIGENDIAN
+# endif
+#endif
+
+/* Enable large inode numbers on Mac OS X 10.5.  */
+#ifndef _DARWIN_USE_64_BIT_INODE
+# define _DARWIN_USE_64_BIT_INODE 1
+#endif
+
+/* Number of bits in a file offset, on hosts where this is settable. */
+/* #undef _FILE_OFFSET_BITS */
+
+/* Define for large files, on AIX-style hosts. */
+/* #undef _LARGE_FILES */
+
+/* Define to empty if `const' does not conform to ANSI C. */
+/* #undef const */
+
+/* Define to `__inline__' or `__inline' if that's what the C compiler
+   calls it, or to nothing if 'inline' is not supported under any name.  */
+#ifndef __cplusplus
+/* #undef inline */
+#endif
+
+/* Define to equivalent of C99 restrict keyword, or to nothing if this is not
+   supported. Do not define if restrict is supported directly. */
+/* #undef restrict */
+
+
+#ifdef ZZIP_HAVE_SYS_TYPES_H
+#include <sys/types.h>
+
+/* Define to `long long' if <sys/types.h> does not define. */
+#ifndef __int64
+#define __int64 long long
+#endif
+
+/* Define to `_zzip_off_t' if <sys/types.h> does not define. */
+#ifndef off64_t
+#define off64_t _zzip_off_t
+#endif
+
+/* Define to `long int' if <sys/types.h> does not define. */
+#ifndef off_t
+#define off_t long int
+#endif
+
+/* Define to `unsigned int' if <sys/types.h> does not define. */
+#ifndef size_t
+#define size_t unsigned int
+#endif
+
+/* Define to `int' if <sys/types.h> does not define. */
+#ifndef ssize_t
+#define ssize_t int
+#endif
+
+#endif
 

@@ -1,7 +1,4 @@
 
-SET(ZZIP_VERSION "0.13.x")
-SET(ZZIP_PACKAGE "v13")
-
 INCLUDE(GNUInstallDirs)
 INCLUDE(CheckIncludeFiles)
 INCLUDE(CheckFunctionExists)
@@ -45,6 +42,7 @@ ENDIF()
 CHECK_TYPE_SIZE(short SIZEOF_SHORT)
 CHECK_TYPE_SIZE(int SIZEOF_INT)
 CHECK_TYPE_SIZE(long SIZEOF_LONG)
+CHECK_TYPE_SIZE(__int64 SIZEOF_INT64)
 
 CHECK_INCLUDE_FILES(byteswap.h ZZIP_HAVE_BYTESWAP_H)
 CHECK_INCLUDE_FILES(direct.h ZZIP_HAVE_DIRECT_H)
@@ -85,8 +83,6 @@ IF (WIN32 AND CMAKE_SYSTEM_VERSION)
   STRING(REPLACE "." "" ver ${VER})
   STRING(REGEX REPLACE "([0-9])" "0\\1" ver ${VER})
 
-  SET(${VERSION} "0x${VER}")
-
   ADD_DEFINITIONS(-D_WIN32_WINNT=${VER} -DZZIP_EXPORTS)
 ENDIF ()
 
@@ -94,10 +90,10 @@ if(MSVC)
 #  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /wd4100 /wd4996 /wd4244 /wd4706 /wd4702 /wd4127 /wd4701")
 elseif(UNIX)
   set(CMAKE_C_COMPILER clang)
-#  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fomit-frame-pointer -Wwrite-strings")
-#  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wstrict-prototypes -Wpointer-arith")
-#  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wsign-compare -Wmissing-declarations -Wdeclaration-after-statement")
-#  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Werror-implicit-function-declaration -Wstrict-aliasing -Warray-bounds")
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fomit-frame-pointer -Wwrite-strings")
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wstrict-prototypes -Wpointer-arith")
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wsign-compare -Wmissing-declarations -Wdeclaration-after-statement")
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wstrict-aliasing -Warray-bounds") #-Werror-implicit-function-declaration 
 endif()
 
 
