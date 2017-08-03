@@ -108,9 +108,8 @@ static int unzzip_cat (int argc, char ** argv, int extract)
 #ifdef ZZIP_HAVE_FNMATCH_H
 			FNM_NOESCAPE | FNM_PATHNAME | FNM_PERIOD))
 #else
-			0
+			0))
 #endif
-			))
 	        {
 	            FILE* out = stdout;
 	            if (extract) out = create_fopen(name, "w", 1);
