@@ -47,7 +47,7 @@ ADD_LIBRARY(zzip_la STATIC ${libzzip_SOURCES} ${libzzip_headers})
 
 TARGET_LINK_LIBRARIES(zzipmapped_la ${ZLIB_LIBRARIES})
 TARGET_LINK_LIBRARIES(zzipfseeko_la ${ZLIB_LIBRARIES})
-TARGET_LINK_LIBRARIES(zzip_la ${ZLIB_LIBRARIES} zzipmmapped_la zzipfseeko_la)
+TARGET_LINK_LIBRARIES(zzip_la ${ZLIB_LIBRARIES})
 
 IF(NOT CYGWIN)
     # This property causes shared libraries on Linux to have the full version

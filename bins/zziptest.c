@@ -79,26 +79,26 @@ int main(int argc, char ** argv)
 
 #if 1
     printf("{check...\n");
-    { struct zzip_dir_hdr * hdr = dir->hdr0;
+    { //struct zzip_dir_hdr * hdr = dir->hdr0;
 
-        if (hdr == NULL)
+        if (dir->hdr0 == NULL)
           { printf ("could not find first header in dir_hdr"); }
         else
         {
             while (1)
             {
-                printf("\ncompression method: %d", hdr->d_compr);
-                if (hdr->d_compr == 0) printf(" (stored)");
-                else if (hdr->d_compr == 8) printf(" (deflated)");
+                printf("\ncompression method: %d", dir->hdr0->d_compr);
+                if (dir->hdr0->d_compr == 0) printf(" (stored)");
+                else if (dir->hdr0->d_compr == 8) printf(" (deflated)");
                 else printf(" (unknown)");
-                printf("\ncrc32: %x\n", hdr->d_crc32);
-                printf("compressed size: %d\n", hdr->d_csize);
-                printf("uncompressed size: %d\n", hdr->d_usize);
-                printf("offset of file in archive: %d\n", hdr->d_off);
-                printf("filename: %s\n\n", hdr->d_name);
+                printf("\ncrc32: %x\n", dir->hdr0->d_crc32);
+                printf("compressed size: %d\n", dir->hdr0->d_csize);
+                printf("uncompressed size: %d\n", dir->hdr0->d_usize);
+                printf("offset of file in archive: %d\n", dir->hdr0->d_off);
+                printf("filename: %s\n\n", dir->hdr0->d_name);
 
-                if (hdr->d_reclen == 0) break;
-                I_(char *, hdr, += hdr->d_reclen);
+                if (dir->hdr0->d_reclen == 0) break;
+                I_(char *, dir->hdr0, += dir->hdr0->d_reclen);
                 if (! quick) sleep(1);
             }
         }
