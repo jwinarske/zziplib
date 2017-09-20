@@ -1,10 +1,16 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
-PROJECT (libs C)
 
 SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/../cmake)
-INCLUDE(Zzip)
 
-SET(libzzip_SOURCES
+if(POLICY CMP0048)
+    cmake_policy(SET CMP0048 NEW)
+endif()
+
+PROJECT(libs VERSION "${PROJECT_VERSION}" LANGUAGES C)
+
+INCLUDE(get_dependent_libs)
+
+SET(zzip_SOURCES
     zip.c
     file.c
     dir.c
@@ -16,7 +22,7 @@ SET(libzzip_SOURCES
     fetch.c
 )
 
-SET(libzzip_headers
+SET(zzip_headers
     stdint.h
     file.h
     plugin.h
@@ -30,49 +36,39 @@ SET(libzzip_headers
     types.h
 )    
 
-IF (BUILD_ZLIB)
-INCLUDE_DIRECTORIES (${CMAKE_BINARY_DIR}/zlib)
+
+SET(zzipmmapped_SOURCES mmapped.c memdisk.c fetch.c)
+SET(zzipmmapped_headers mmapped.h memdisk.h fetch.h)
+
+SET(zzipfseeko_SOURCES fseeko.c fetch.c)
+SET(zzipfseeko_headers fseeko.h fetch.h)
+
+IF (BUILD_SHARED)
+ADD_LIBRARY(zzip SHARED ${zzip_SOURCES} ${zzip_headers})
+ADD_LIBRARY(zzipmapped SHARED ${zzipmmapped_SOURCES} ${zzipmmapped_headers})
+ADD_LIBRARY(zzipfseeko SHARED ${zzipfseeko_SOURCES} ${zzipfseeko_headers})
+INSTALL (TARGETS zzip LIBRARY DESTINATION ${CMAKE_INSTALL_PREFIX} COMPONENT libraries)
+INSTALL (TARGETS zzipmapped LIBRARY DESTINATION ${CMAKE_INSTALL_PREFIX} COMPONENT libraries)
+INSTALL (TARGETS zzipfseeko LIBRARY DESTINATION ${CMAKE_INSTALL_PREFIX} COMPONENT libraries)
+TARGET_LINK_LIBRARIES(zzip -lz)
+TARGET_LINK_LIBRARIES(zzipmapped -lz)
+TARGET_LINK_LIBRARIES(zzipfseeko -lz)
+ELSE ()
+ADD_LIBRARY(zzip STATIC ${zzip_SOURCES} ${zzip_headers})
+ADD_LIBRARY(zzipmapped STATIC ${zzipmmapped_SOURCES} ${zzipmmapped_headers})
+ADD_LIBRARY(zzipfseeko STATIC ${zzipfseeko_SOURCES} ${zzipfseeko_headers})
+INSTALL (TARGETS zzip ARCHIVE DESTINATION lib LIBRARY DESTINATION ${CMAKE_INSTALL_PREFIX} COMPONENT libraries)
+INSTALL (TARGETS zzipmapped ARCHIVE DESTINATION lib LIBRARY DESTINATION ${CMAKE_INSTALL_PREFIX} COMPONENT libraries)
+INSTALL (TARGETS zzipfseeko ARCHIVE DESTINATION lib LIBRARY DESTINATION ${CMAKE_INSTALL_PREFIX} COMPONENT libraries)
 ENDIF ()
-INCLUDE_DIRECTORIES (${ZLIB_INCLUDE_DIR} ${CMAKE_SOURCE_DIR})
-
-SET(libzzipmmapped_SOURCES mmapped.c memdisk.c fetch.c)
-SET(libzzipmmapped_headers mmapped.h memdisk.h fetch.h)
-
-SET(libzzipfseeko_SOURCES fseeko.c fetch.c)
-SET(libzzipfseeko_headers fseeko.h fetch.h)
-
-ADD_LIBRARY(zzipmapped_la STATIC ${libzzipmmapped_SOURCES} ${libzzipmmapped_headers})
-ADD_LIBRARY(zzipfseeko_la STATIC ${libzzipfseeko_SOURCES} ${libzzipfseeko_headers})
-ADD_LIBRARY(zzip_la STATIC ${libzzip_SOURCES} ${libzzip_headers})
-
-TARGET_LINK_LIBRARIES(zzipmapped_la ${ZLIB_LIBRARIES})
-TARGET_LINK_LIBRARIES(zzipfseeko_la ${ZLIB_LIBRARIES})
-TARGET_LINK_LIBRARIES(zzip_la ${ZLIB_LIBRARIES})
 
 IF(NOT CYGWIN)
     # This property causes shared libraries on Linux to have the full version
     # encoded into their final filename.  We disable this on Cygwin because
     # it causes cygz-${ZLIB_FULL_VERSION}.dll to be created when cygz.dll
     # seems to be the default.
-    SET_TARGET_PROPERTIES(zzipmapped_la PROPERTIES VERSION ${SRC_VER})
-    SET_TARGET_PROPERTIES(zzipfseeko_la PROPERTIES VERSION ${SRC_VER})
-    SET_TARGET_PROPERTIES(zzip_la PROPERTIES VERSION ${SRC_VER})
+    SET_TARGET_PROPERTIES(zzipmapped PROPERTIES VERSION ${PROJECT_VERSION})
+    SET_TARGET_PROPERTIES(zzipfseeko PROPERTIES VERSION ${PROJECT_VERSION})
+    SET_TARGET_PROPERTIES(zzip PROPERTIES VERSION ${PROJECT_VERSION})
 ENDIF()
 
-INSTALL (TARGETS zzipmapped_la
-    ARCHIVE DESTINATION lib
-    LIBRARY DESTINATION lib
-    COMPONENT libraries
-)
-INSTALL (TARGETS zzipfseeko_la
-    ARCHIVE DESTINATION lib
-    LIBRARY DESTINATION lib
-    COMPONENT libraries
-)
-INSTALL (TARGETS zzip_la
-    ARCHIVE DESTINATION lib
-    LIBRARY DESTINATION lib
-    COMPONENT libraries
-)
-
-set(CPACK_COMPONENTS_ALL libraries)
