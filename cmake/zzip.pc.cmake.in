@@ -1,0 +1,12 @@
+prefix=@CMAKE_INSTALL_PREFIX@
+exec_prefix=@CMAKE_INSTALL_PREFIX@
+libdir=@INSTALL_LIB_DIR@
+includedir=@INSTALL_INC_DIR@
+
+Name: zzip
+Description: The ZZip library in C
+Version: @PACKAGE_VERSION@
+
+Requires:
+Libs: -L${libdir} -lzzip -lzzipfseeko -lzzipmapped
+Cflags: -I${includedir}
