@@ -73,5 +73,7 @@ Create Eclipse project
 
     cmake -G"Eclipse CDT4" .. -DBUILD_SHARED=ON
 
-Android
+Cygwin
 ---------
+
+    cmake .. -G"Unix Makefiles" -DBUILD_SHARED=ON -DCMAKE_INSTALL_PREFIX=/home/joel/git/zziplib/buildcyg
