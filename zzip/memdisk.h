@@ -28,19 +28,26 @@ struct _zzip_mem_disk {
 #define zzip_mem_disk_extern
 #endif
 
+_zzip_export
 zzip_mem_disk_extern zzip__new__ ZZIP_MEM_DISK*
 zzip_mem_disk_new (void);
+_zzip_export
 zzip_mem_disk_extern zzip__new__ ZZIP_MEM_DISK*
 zzip_mem_disk_open (char* filename);
+_zzip_export
 zzip_mem_disk_extern zzip__new__ ZZIP_MEM_DISK*
 zzip_mem_disk_fdopen (int fd);
+_zzip_export
 zzip_mem_disk_extern zzip__new__ ZZIP_MEM_DISK *
 zzip_mem_disk_buffer(char *buffer, size_t buflen);
+_zzip_export
 zzip_mem_disk_extern void
 zzip_mem_disk_close (ZZIP_MEM_DISK* _zzip_restrict dir);
 
+_zzip_export
 zzip_mem_disk_extern long
 zzip_mem_disk_load (ZZIP_MEM_DISK* dir, ZZIP_DISK* disk);
+_zzip_export
 zzip_mem_disk_extern void
 zzip_mem_disk_unload (ZZIP_MEM_DISK* dir);
 ZZIP_EXTRA_BLOCK*
@@ -130,11 +137,13 @@ zzip_mem_entry_to_data(ZZIP_MEM_ENTRY* entry) {
     return _zzip_mem_entry_to_data(entry); }
 #endif
 
+_zzip_export
 ZZIP_MEM_ENTRY*
 zzip_mem_disk_findfile(ZZIP_MEM_DISK* dir,
                        char* filename, ZZIP_MEM_ENTRY* after,
 		       zzip_strcmp_fn_t compare);
 
+_zzip_export
 ZZIP_MEM_ENTRY*
 zzip_mem_disk_findmatch(ZZIP_MEM_DISK* dir,
                         char* filespec, ZZIP_MEM_ENTRY* after,
@@ -158,15 +167,20 @@ zzip_mem_disk_findmatch(ZZIP_MEM_DISK* dir,
 
 typedef ZZIP_DISK_FILE ZZIP_MEM_DISK_FILE;
 
+_zzip_export
 zzip__new__ ZZIP_MEM_DISK_FILE*
 zzip_mem_entry_fopen (ZZIP_MEM_DISK* dir, ZZIP_MEM_ENTRY* entry);
+_zzip_export
 zzip__new__ ZZIP_MEM_DISK_FILE*
 zzip_mem_disk_fopen (ZZIP_MEM_DISK* dir, char* filename);
+_zzip_export
 _zzip_size_t
 zzip_mem_disk_fread (void* ptr, _zzip_size_t size, _zzip_size_t nmemb,
                      ZZIP_MEM_DISK_FILE* file);
+_zzip_export
 int
 zzip_mem_disk_fclose (ZZIP_MEM_DISK_FILE* file);
+_zzip_export
 int
 zzip_mem_disk_feof (ZZIP_MEM_DISK_FILE* file);
 

@@ -8,11 +8,10 @@ endif()
 
 PROJECT(zzipwrap VERSION "${PROJECT_VERSION}" LANGUAGES C)
 
-INCLUDE(get_dependent_libs)
-
+INCLUDE(common_config)
 
 ADD_EXECUTABLE(zzipwrap zzipwrap.c wrap.c)
-TARGET_LINK_LIBRARIES(zzipwrap -lzzip -lz)
+TARGET_LINK_LIBRARIES(zzipwrap ${ZZIP_LIB} ${Z_LIB})
 INSTALL (TARGETS zzipwrap RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX}/bin COMPONENT applications)
-ADD_DEPENDENCIES( zzipwrap zzip )
+ADD_DEPENDENCIES( zzipwrap ${ZZIP_LIB} )
 

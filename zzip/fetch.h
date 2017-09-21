@@ -16,13 +16,13 @@ extern "C" {
 #endif
 
 /* get 16/32 bits from little-endian zip-file to host byteorder */
-extern uint32_t __zzip_get32(zzip_byte_t * s) ZZIP_GNUC_CONST;
-extern uint16_t __zzip_get16(zzip_byte_t * s) ZZIP_GNUC_CONST;
-extern void     __zzip_set32(zzip_byte_t * s, uint32_t v);
-extern void     __zzip_set16(zzip_byte_t * s, uint16_t v);
+_zzip_export uint32_t __zzip_get32(zzip_byte_t * s) ZZIP_GNUC_CONST;
+_zzip_export uint16_t __zzip_get16(zzip_byte_t * s) ZZIP_GNUC_CONST;
+_zzip_export void     __zzip_set32(zzip_byte_t * s, uint32_t v);
+_zzip_export void     __zzip_set16(zzip_byte_t * s, uint16_t v);
 
-extern uint64_t __zzip_get64(zzip_byte_t * s) ZZIP_GNUC_CONST;
-extern void     __zzip_set64(zzip_byte_t * s, uint64_t v);
+_zzip_export uint64_t __zzip_get64(zzip_byte_t * s) ZZIP_GNUC_CONST;
+_zzip_export void     __zzip_set64(zzip_byte_t * s, uint64_t v);
 
 /* just in case that you use a non-configure-d setup (e.g. MSVC) */
 #ifndef ZZIP_HAVE_ALIGNED_ACCESS_REQUIRED

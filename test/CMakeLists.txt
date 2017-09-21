@@ -1,5 +1,9 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
 
+IF (NOT MSVC)
+FIND_PACKAGE(CUnit REQUIRED)
+ENDIF ()
+
 SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/../cmake)
 
 if(POLICY CMP0048)
@@ -8,17 +12,21 @@ endif()
 
 PROJECT(test VERSION "${PROJECT_VERSION}" LANGUAGES C)
 
-INCLUDE(get_dependent_libs)
+INCLUDE(common_config)
 
 
 ADD_EXECUTABLE(zzipself zzipself.c)
-TARGET_LINK_LIBRARIES(zzipself -lzzip -lz)
+TARGET_LINK_LIBRARIES(zzipself ${ZZIP_LIB} ${Z_LIB})
 INSTALL (TARGETS zzipself RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX}/bin COMPONENT applications)
+IF (NOT MSVC)
+    ADD_TEST(NAME zzipself COMMAND zzipself)
+ENDIF()
 ADD_DEPENDENCIES( zzipself zzip )
 
 ADD_EXECUTABLE(zzipsetstub zzipsetstub.c)
-TARGET_LINK_LIBRARIES(zzipsetstub -lzzip -lz)
+TARGET_LINK_LIBRARIES(zzipsetstub ${ZZIP_LIB} ${Z_LIB})
 INSTALL (TARGETS zzipsetstub RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX}/bin COMPONENT applications)
+IF (NOT MSVC)
+    ADD_TEST(NAME zzipsetstub COMMAND zzipsetstub)
+ENDIF ()
 ADD_DEPENDENCIES( zzipsetstub zzip )
-
-

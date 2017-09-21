@@ -1,4 +1,3 @@
-FIND_PACKAGE(Git REQUIRED)
 
 if(GIT_FOUND)
     execute_process(COMMAND ${GIT_EXECUTABLE} describe --abbrev=0 --tags
