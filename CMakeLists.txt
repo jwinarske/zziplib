@@ -42,7 +42,6 @@ INCLUDE(gen_config_header)
 ADD_SUBDIRECTORY("zzip")
 ADD_SUBDIRECTORY("bins")
 IF(ZZIP_TESTS)
-    ENABLE_TESTING()
     ADD_SUBDIRECTORY("test")
 ENDIF()
 
