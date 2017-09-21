@@ -1,13 +1,13 @@
 /* config.h.in.  */
 
-#define PACKAGE_BUGREPORT ""
-#define PACKAGE_NAME ""
-#define PACKAGE_STRING ""
+#define PACKAGE_BUGREPORT "https://github.com/gdraheim/zziplib/issues"
+#define PACKAGE_NAME "zzip"
+#define PACKAGE_STRING "The ZZIPlib provides read access on ZIP-archives and unpacked data. It features an additional simplified API following the standard Posix API for file access"
 #define PACKAGE_TARNAME ""
-#define PACKAGE_URL ""
-#define PACKAGE_VERSION ""
+#define PACKAGE_URL "https://github.com/gdraheim/zziplib"
+#define PACKAGE_VERSION "@PROJECT_VERSION@"
 
-#define ZZIP_VERSION "@SRC_VER@"
+#define ZZIP_VERSION "@PROJECT_VERSION@"
 #if defined(_WIN32) || defined(_WIN64)
 #define ZZIP_PACKAGE "zziplib-msvc"
 #else
