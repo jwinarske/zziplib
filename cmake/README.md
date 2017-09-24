@@ -1,31 +1,44 @@
 
 CMake Options
+-------------
 
-    1. BUILD_SHARED - Build shared libs.  OFF by default.  If set dynamic libs are generated and linked (zlib include), otherwise static libs are linked.
-    2. ZZIP_CONFIGURE_INSTALL - Package Install. ON by default
-    3. ZZIP_TESTS - build test subdirectory.  ON by default
+    OPTION (BUILD_SHARED "Build shared libs" ON)
+    OPTION (BUILD_ONLY_LIBS "Only build libraries" OFF)
+    OPTION (BUILD_TESTS "Enable building tests" ON)
+    OPTION (BUILD_ZLIB "Enable building zlib" OFF)
+    OPTION (ZZIP_CONFIGURE_INSTALL "Install Package" ON)
+    OPTION (USE_MMAP "Use memmap" OFF)
+    OPTION (LOWSTACK "" OFF)
+    OPTION (LARGEFILE_SOURCE "" OFF)
+    OPTION (ZZIP_EASY "" OFF)
+    OPTION (ZZIP_HARDEN "" OFF)
+    OPTION (ZZIP_ALLOW_MODULO_ENTRIES "" OFF)
+    OPTION (ZZIP_ENABLE_WRITE "Enable writing..." OFF)
+    OPTION (ZLIB_AMD64 "Enable AMD64 assembler optimizations" OFF)
+    OPTION (ZLIB_ASM686 "Enable 686 assembler optimizations" OFF)
+    
 
-    4. USE_MMAP - OFF by default
-    5. LOWSTACK - OFF by default
-    6. LARGEFILE_SOURCE - OFF by default
-    7. ZZIP_EASY - OFF by default
-    8. ZZIP_HARDEN - OFF by default
-    9. ZZIP_ALLOW_MODULO_ENTRIES - OFF by default
-
+To override the default option value, use the "-DBUILD_ONLY_LIBS=ON" scheme.  One you set it, CMake caches the value; to reset 
 
 Building on Windows
----------
+-------------------
 
-Win32 zzip.sln
+Win32 (zzip.sln)
 
-    cmake .. -DZZIP_CONFIGURE_INSTALL=OFF -DZLIB_LIBRARY_DIR=C:\cygwin64\home\joel\git\zlib\build\Release -DZLIB_INCLUDE_DIR=C:\cygwin64\home\joel\git\zlib
+    mkdir win32
+	cd win32
+	cmake .. -G"Visual Studio 15" -DCMAKE_INSTALL_PREFIX=c:\tmp\zziplib\Win32\Debug -DBUILD_ZLIB=ON -DCMAKE_BUILD_TYPE=Debug -DZZIP_ENABLE_WRITE=ON
+	cd ..
+	cmake --build win32 --config Debug
 
-Win64 zzip.sln
+Win64 (zzip.sln)
 
-    cmake .. -G"Visual Studio 15 Win64" -DZZIP_CONFIGURE_INSTALL=OFF -DZLIB_LIBRARY_DIR=C:\cygwin64\home\joel\git\zlib\build64\Release -DZLIB_INCLUDE_DIR=C:\cygwin64\home\joel\git\zlib;C:\cygwin64\home\joel\git\zlib\build64 -DBUILD_SHARED=ON
+    mkdir win64
+	cd win64
+    cmake .. -G"Visual Studio 15 Win64" -DCMAKE_INSTALL_PREFIX=c:\tmp\zziplib\Win64\Debug -DBUILD_ZLIB=ON -DCMAKE_BUILD_TYPE=Debug -DZZIP_ENABLE_WRITE=ON
+	cd ..
+	cmake --build win64 --config Debug
     
-Note: You will need a Win64 zlib build when doing this...
-
 Available CMake Visual Studio Generators
 
 

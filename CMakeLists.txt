@@ -24,6 +24,9 @@ OPTION (ZZIP_EASY "" OFF)
 OPTION (ZZIP_HARDEN "" OFF)
 OPTION (ZZIP_ALLOW_MODULO_ENTRIES "" OFF)
 OPTION (ZZIP_ENABLE_WRITE "Enable writing..." OFF)
+OPTION (ZLIB_AMD64 "Enable AMD64 assembler optimizations" OFF)
+OPTION (ZLIB_ASM686 "Enable 686 assembler optimizations" OFF)
+
 
 set(CMAKE_LEGACY_CYGWIN_WIN32 0) # Remove when CMake >= 2.8.4 is required
 
