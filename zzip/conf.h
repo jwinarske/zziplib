@@ -19,7 +19,6 @@
 #if !defined ZZIP_OMIT_CONFIG_H
 # if defined _MSC_VER || defined __BORLANDC__ || defined __WATCOMC__
 #include <zzip/_config.h>
-# include <zzip/_msvc.h>
 # elif defined ZZIP_1_H
 # include "zzip-1.h"
 # elif defined ZZIP_2_H
@@ -71,7 +70,11 @@
 #ifdef   ZZIP_restrict
 #define _zzip_restrict ZZIP_restrict
 #else
+#if defined(_WIN32)
+#define _zzip_restrict __restrict
+# else
 #define _zzip_restrict restrict
+# endif
 #endif
 #endif
 #if defined __linux__ && __GNUC__+0 >= 4

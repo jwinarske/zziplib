@@ -149,21 +149,23 @@ zzip_dir_creat_ext_io(zzip_char_t * name, int o_mode,
         if (fd != -1)
             { dir->fd = fd; return dir; }
 
-        ___ zzip_strings_t *exx = ext;
-        int exx_len;
-        for (; *exx; exx++)
-        {
-            if ((exx_len = strlen(*exx) + 1) <= name_len &&
-                ! memcmp(dir->realname + (name_len - exx_len), *exx, exx_len))
-                break;          /* keep unmodified */
-            exx++;
-            if (*exx)
-                continue;
+        ___ if (ext) {
+				zzip_strings_t *exx = ext;
+				int exx_len;
+				for (; *exx; exx++)
+				{
+					if ((exx_len = strlen(*exx) + 1) <= name_len &&
+						!memcmp(dir->realname + (name_len - exx_len), *exx, exx_len))
+						break;          /* keep unmodified */
+					exx++;
+					if (*exx)
+						continue;
 
-            if (! (exx_len = strlen(*exx)) || exx_len >= MAX_EXT_LEN)
-                break;
-            memcpy(dir->realname + name_len, exx, exx_len);     /* append! */
-        }
+					if (!(exx_len = strlen(*exx)) || exx_len >= MAX_EXT_LEN)
+						break;
+					memcpy(dir->realname + name_len, exx, exx_len);     /* append! */
+				}
+			}
         ____;
         fd = (io->fd.open)(dir->realname, O_CREAT | O_TRUNC | O_WRONLY, o_mode);
         dir->realname[name_len] = '\0'; /* keep ummodified */

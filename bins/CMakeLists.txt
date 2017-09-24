@@ -11,30 +11,26 @@ PROJECT(bins VERSION "${PROJECT_VERSION}" LANGUAGES C)
 INCLUDE(common_config)
 
 
-ADD_EXECUTABLE(zzcat zzcat.c)
-TARGET_LINK_LIBRARIES(zzcat ${ZZIP_LIB} ${Z_LIB})
-INSTALL (TARGETS zzcat RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX}/bin COMPONENT applications)
-ADD_DEPENDENCIES( zzcat zzip )
+ADD_EXECUTABLE(minzzip zzip.c zzipmake-zip.c )
+TARGET_LINK_LIBRARIES(minzzip ${ZZIP_LIB} ${Z_LIB})
+INSTALL (TARGETS minzzip RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX}/bin COMPONENT applications)
+ADD_DEPENDENCIES( minzzip zzip )
 
-ADD_EXECUTABLE(zzdir zzdir.c)
-TARGET_LINK_LIBRARIES(zzdir ${ZZIP_LIB} ${Z_LIB})
-INSTALL (TARGETS zzdir RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX}/bin COMPONENT applications)
-ADD_DEPENDENCIES( zzdir zzip )
+set(instSourceFiles
+    "${CMAKE_CURRENT_SOURCE_DIR}/zzcat.c"
+    "${CMAKE_CURRENT_SOURCE_DIR}/zzdir.c"
+    "${CMAKE_CURRENT_SOURCE_DIR}/zzxorcat.c"
+    "${CMAKE_CURRENT_SOURCE_DIR}/zzxordir.c"
+    "${CMAKE_CURRENT_SOURCE_DIR}/zzxorcopy.c"
+)
 
-ADD_EXECUTABLE(zzxorcat zzxorcat.c)
-TARGET_LINK_LIBRARIES(zzxorcat ${ZZIP_LIB} ${Z_LIB})
-INSTALL (TARGETS zzxorcat RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX}/bin COMPONENT applications)
-ADD_DEPENDENCIES( zzxorcat zzip )
-
-ADD_EXECUTABLE(zzxordir zzxordir.c)
-TARGET_LINK_LIBRARIES(zzxordir ${ZZIP_LIB} ${Z_LIB})
-INSTALL (TARGETS zzxordir RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX}/bin COMPONENT applications)
-ADD_DEPENDENCIES( zzxordir zzip )
-
-ADD_EXECUTABLE(zzxorcopy zzxorcopy.c)
-TARGET_LINK_LIBRARIES(zzxorcopy ${ZZIP_LIB} ${Z_LIB})
-INSTALL (TARGETS zzxorcopy RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX}/bin COMPONENT applications)
-ADD_DEPENDENCIES( zzxorcopy zzip )
+foreach (instSourceFile IN LISTS instSourceFiles)
+    get_filename_component(exeName ${instSourceFile} NAME_WE)
+    add_executable(${exeName} ${instSourceFile})
+    target_link_libraries(${exeName} ${ZZIP_LIB} ${Z_LIB})
+    install (TARGETS ${exeName} RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX}/bin COMPONENT applications)
+    add_dependencies(${exeName} zzip)
+endforeach()
 
 ADD_EXECUTABLE(unzzip unzzip.c unzzipcat-zip.c unzzipdir-zip.c)
 TARGET_LINK_LIBRARIES(unzzip ${ZZIP_LIB} ${Z_LIB})
@@ -61,17 +57,24 @@ TARGET_LINK_LIBRARIES(unzip-mem ${ZZIP_MAPPED} ${Z_LIB})
 INSTALL (TARGETS unzip-mem RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX}/bin COMPONENT applications)
 ADD_DEPENDENCIES( unzip-mem zzipmapped )
 
+
 # non-install apps
-ADD_EXECUTABLE(zziptest zziptest.c)
-TARGET_LINK_LIBRARIES(zziptest ${ZZIP_LIB} ${Z_LIB})
-ADD_DEPENDENCIES( zziptest zzip )
+set(noinstSourceFiles
+    "${CMAKE_CURRENT_SOURCE_DIR}/zziptest.c"
+    "${CMAKE_CURRENT_SOURCE_DIR}/zzobfuscated.c"
+)
 
-ADD_EXECUTABLE(zzobfuscated zzobfuscated.c)
-TARGET_LINK_LIBRARIES(zzobfuscated ${ZZIP_LIB} ${Z_LIB})
-ADD_DEPENDENCIES( zzobfuscated zzip )
+foreach (noinstSourceFile IN LISTS noinstSourceFiles)
+    get_filename_component(exeName ${noinstSourceFile} NAME_WE)
+    add_executable(${exeName} ${noinstSourceFile})
+    target_link_libraries(${exeName} ${ZZIP_LIB} ${Z_LIB})
+    add_dependencies(${exeName} zzip)
+endforeach()
 
-ADD_EXECUTABLE(_zzip zzip.c zzipmake-zip.c)
-TARGET_LINK_LIBRARIES(_zzip ${ZZIP_LIB} ${Z_LIB})
-ADD_DEPENDENCIES( _zzip zzip )
-
-
+IF (BUILD_TESTS)
+enable_testing()
+add_test(
+    NAME check-readme 
+    COMMAND zzcat "${CMAKE_SOURCE_DIR}/test/README > test.out"
+)
+ENDIF (BUILD_TESTS)

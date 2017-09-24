@@ -160,7 +160,11 @@
 # define ZZIP_FUNC             __func__
 # define ZZIP_FUNCTION         ""
 # else
+# if defined(_WIN32)
+# define ZZIP_FUNC             __func__
+# else
 # define ZZIP_FUNC             0
+# endif
 # define ZZIP_FUNCTION         ""
 # endif
 #endif
