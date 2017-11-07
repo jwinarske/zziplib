@@ -17,6 +17,8 @@
 #cmakedefine ZZIP_HAVE_BYTESWAP_H
 #cmakedefine ZZIP_HAVE_DIRECT_H
 #cmakedefine ZZIP_HAVE_DIRENT_H
+#cmakedefine ZZIP_HAVE_TELLDIR
+#cmakedefine ZZIP_HAVE_SEEKDIR
 #cmakedefine ZZIP_HAVE_DLFCN_H
 #cmakedefine ZZIP_HAVE_FNMATCH_H
 #cmakedefine ZZIP_HAVE_INTTYPES_H

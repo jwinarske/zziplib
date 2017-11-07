@@ -29,8 +29,6 @@ static const char usage[] =
 int 
 main (int argc, char ** argv)
 {
-    int exitcode = 0;
-
     if (argc <= 1 || ! strcmp (argv[1], "--help"))
     {
         printf (usage);

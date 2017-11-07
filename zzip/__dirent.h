@@ -13,14 +13,26 @@
  */
 
 #ifdef ZZIP_HAVE_DIRENT_H
+#if defined(ZZIP_HAVE_TELLDIR) && defined(ZZIP_HAVE_SEEKDIR)
 #define USE_DIRENT 1
+#else
+#define USE_DIRENT 0
+#endif
 
 #define _zzip_opendir   opendir
 #define _zzip_readdir   readdir
 #define _zzip_closedir  closedir
 #define _zzip_rewinddir rewinddir
+#ifdef ZZIP_HAVE_TELLDIR
 #define _zzip_telldir   telldir
+#else
+#define _zzip_telldir   
+#endif
+#ifdef ZZIP_HAVE_SEEKDIR
 #define _zzip_seekdir   seekdir
+#else
+#define _zzip_seekdir   
+#endif
 #define _zzip_DIR       DIR
 
 #include <dirent.h>

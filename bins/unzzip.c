@@ -34,8 +34,6 @@ static int unzzip_help(void)
 int 
 main (int argc, char ** argv)
 {
-    int exitcode = 0;
-
     if (argc <= 1 || ! strcmp (argv[1], "--help"))
     {
         return unzzip_help();
