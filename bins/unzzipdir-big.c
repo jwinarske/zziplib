@@ -9,19 +9,20 @@
 
 #include <zzip/fseeko.h>
 #include <zzip/fetch.h>
+#include <zzip/__fnmatch.h>
 #include <stdlib.h>
 #include <string.h>
 #include "unzzipdir-zip.h"
-
-#ifdef ZZIP_HAVE_FNMATCH_H
-#include <fnmatch.h>
-#else
-#define fnmatch(x,y,z) strcmp(x,y)
-#endif
+#include "unzzip-states.h"
 
 static const char* comprlevel[] = {
     "stored",   "shrunk",   "redu:1",   "redu:2",   "redu:3",   "redu:4",
     "impl:N",   "toknze",   "defl:N",   "defl:B",   "impl:B" };
+
+static int exitcode(int e)
+{
+    return EXIT_ERRORS;
+}
 
 static int 
 unzzip_list (int argc, char ** argv, int verbose)
@@ -29,10 +30,10 @@ unzzip_list (int argc, char ** argv, int verbose)
     int argn;
     FILE* disk;
 
-    disk = fopen (argv[1], "r");
+    disk = fopen (argv[1], "rb");
     if (! disk) {
 	perror(argv[1]);
-	return -1;
+	return exitcode(errno);
     }
 
     if (argc == 2)

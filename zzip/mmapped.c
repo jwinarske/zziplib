@@ -142,7 +142,7 @@ zzip_disk_munmap(ZZIP_DISK * disk)
  * to  => zzip_disk_mmap for bringing it to main memory. If it can not
  * be => mmap(2)'ed then we slurp the whole file into a newly => malloc(2)'ed
  * memory block. Only if that fails too then we return null. Since handling
- * of disk->buffer is ambigous it should not be snatched away please.
+ * of disk->buffer is ambiguous it should not be snatched away please.
  *
  * This function may return null on errors (errno).
  */
@@ -216,7 +216,7 @@ zzip_disk_buffer(void *buffer, size_t buflen) {
  * zip archive, including any malloc()ed blocks, sharedmem mappings
  * and it dumps the handle struct as well.
  *
- * This function returns 0 on sucess (or whatever => munmap says).
+ * This function returns 0 on success (or whatever => munmap says).
  */
 int
 zzip_disk_close(ZZIP_DISK * disk)
@@ -414,16 +414,19 @@ zzip_disk_findfirst(ZZIP_DISK * disk)
     for (; p >= disk->buffer; p--)
     {
         zzip_byte_t *root;      /* (struct zzip_disk_entry*) */
+	zzip_size_t rootsize;	/* Size of root central directory */
+
         if (zzip_disk_trailer_check_magic(p))
         {
             struct zzip_disk_trailer *trailer = (struct zzip_disk_trailer *) p;
             zzip_size_t rootseek = zzip_disk_trailer_get_rootseek(trailer);
+	    rootsize = zzip_disk_trailer_get_rootsize(trailer);
+
             root = disk->buffer + rootseek;
             DBG2("disk rootseek at %lli", (long long)rootseek);
             if (root > p)
             {
                 /* the first disk_entry is after the disk_trailer? can't be! */
-                zzip_size_t rootsize = zzip_disk_trailer_get_rootsize(trailer);
                 DBG2("have rootsize at %lli", (long long)rootsize);
                 if (disk->buffer + rootsize > p)
                     continue;
@@ -442,6 +445,7 @@ zzip_disk_findfirst(ZZIP_DISK * disk)
                 return 0;
             }
             zzip_size_t rootseek = zzip_disk64_trailer_get_rootseek(trailer);
+	    rootsize = zzip_disk64_trailer_get_rootsize(trailer);
             DBG2("disk64 rootseek at %lli", (long long)rootseek);
             root = disk->buffer + rootseek;
             if (root > p)
@@ -458,9 +462,15 @@ zzip_disk_findfirst(ZZIP_DISK * disk)
             errno = EBADMSG;
             return 0;
         }
+	if (root >= disk->endbuf || (root + rootsize) >= disk->endbuf)
+	{
+	    DBG1("root behind endbuf should be impossible");
+	    errno = EBADMSG;
+	    return 0;
+	}
         if (zzip_disk_entry_check_magic(root))
         {
-            DBG1("found the disk root");
+            DBG2("found the disk root %p", root);
             return (struct zzip_disk_entry *) root;
         }
     } ____;
@@ -626,7 +636,13 @@ zzip_disk_entry_fopen(ZZIP_DISK * disk, ZZIP_DISK_ENTRY * entry)
     file->avail = zzip_file_header_usize(header);
 
     if (! file->avail || zzip_file_header_data_stored(header))
-        { file->stored = zzip_file_header_to_data (header); return file; }
+    { 
+         file->stored = zzip_file_header_to_data (header);
+         DBG2("stored size %i", (int) file->avail);
+         if (file->stored + file->avail >= disk->endbuf)
+             goto error;
+         return file; 
+    }
 
     file->stored = 0;
     file->zlib.opaque = 0;
@@ -635,15 +651,22 @@ zzip_disk_entry_fopen(ZZIP_DISK * disk, ZZIP_DISK_ENTRY * entry)
     file->zlib.avail_in = zzip_file_header_csize(header);
     file->zlib.next_in = zzip_file_header_to_data(header);
 
-    if (! zzip_file_header_data_deflated(header) ||
-        inflateInit2(&file->zlib, -MAX_WBITS) != Z_OK)
-    {
-        free (file);
-        errno = EBADMSG;
-        return 0; 
-    }
+    DBG2("compressed size %i", (int) file->zlib.avail_in);
+    if (file->zlib.next_in + file->zlib.avail_in >= disk->endbuf)
+         goto error;
+    if (file->zlib.next_in < disk->buffer)
+         goto error;
+
+    if (! zzip_file_header_data_deflated(header))
+        goto error;
+    if (inflateInit2(&file->zlib, -MAX_WBITS) != Z_OK)
+        goto error;
 
     return file;
+error:
+    free (file);
+    errno = EBADMSG;
+    return 0; 
     ____;
 }
 
@@ -682,6 +705,12 @@ zzip_disk_fread(void *ptr, zzip_size_t sized, zzip_size_t nmemb,
         size = file->avail;
     if (file->stored)
     {
+        if (file->stored + size >= file->endbuf)
+        {
+            DBG1("try to read beyond end of file");
+            return 0; /* ESPIPE */
+        }
+        DBG3("copy stored %p %i", file->stored, (int)size);
         memcpy(ptr, file->stored, size);
         file->stored += size;
         file->avail -= size;

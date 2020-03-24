@@ -21,7 +21,7 @@
        href="zzip-zip.html">ZIP Access</a>
 <br>-<a alt="zzip-file - Using Zipped Files Transparently"
        href="zzip-file.html">Transparently</a>
-<br>-<a alt="zzip-sdl-rwops - Example to make an SDL_rwops Inteface" 
+<br>-<a alt="zzip-sdl-rwops - Example to make an SDL_rwops Interface"
        href="zzip-sdl-rwops.html">SDLrwops Example</a>
 <br>-<a alt="zzip-extio - Customizing the file access" 
        href="zzip-extio.html">ext/io Customization</a>
@@ -415,7 +415,8 @@ generated 2003-12-12
  <code>(<nobr>int fd</nobr>,
 <nobr>struct zzip_disk_trailer * trailer</nobr>,
 <nobr>struct zzip_dir_hdr ** hdr_return</nobr>,
-<nobr>zzip_plugin_io_t io</nobr>)</code>
+<nobr>zzip_plugin_io_t io</nobr>,
+<nobr>zzip_off_t filesize</nobr>)</code>
 
 </td></tr><tr valign="top">
 <td valign="top"><code>ZZIP_DIR*
@@ -1091,7 +1092,8 @@ generated 2003-12-12
  <code>(<nobr>int fd</nobr>,
 <nobr>struct zzip_disk_trailer * trailer</nobr>,
 <nobr>struct zzip_dir_hdr ** hdr_return</nobr>,
-<nobr>zzip_plugin_io_t io</nobr>)</code>
+<nobr>zzip_plugin_io_t io</nobr>,
+<nobr>zzip_off_t filesize</nobr>)</code>
 
 </code></code><dt>
 <dd><p> &nbsp;(../zzip/zip.c)
@@ -1139,7 +1141,7 @@ generated 2003-12-12
  <br />  are helper functions used implicitly in other zzipcalls 
  <br />  e.g. <a href="#zzip_dir_close"><code>zzip_dir_close</code></a> = zzip_close  
  <p> 
-   returns zero on sucess 
+   returns zero on success
  <br />  returns the refcount when files are attached. 
  
 <p align="right"><small>(../zzip/zip.c)</small></p></dd>

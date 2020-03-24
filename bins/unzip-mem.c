@@ -8,6 +8,7 @@
 #include <zlib.h> /* crc32 */
 
 #include <zzip/memdisk.h>
+#include <zzip/__fnmatch.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -20,12 +21,6 @@
 #endif
 
 #include <time.h>
-
-#ifdef ZZIP_HAVE_FNMATCH_H
-#include <fnmatch.h>
-#else
-#define fnmatch(x,y,z) strcmp(x,y)
-#endif
 
 #define ___ {
 #define ____ }
@@ -96,7 +91,7 @@ static void zzip_mem_entry_pipe(ZZIP_MEM_DISK* disk,
 static void zzip_mem_entry_make(ZZIP_MEM_DISK* disk, 
 				ZZIP_MEM_ENTRY* entry)
 {
-    FILE* file = fopen (entry->zz_name, "w");
+    FILE* file = fopen (entry->zz_name, "wb");
     if (file) { zzip_mem_entry_pipe (disk, entry, file); fclose (file); }
     perror (entry->zz_name);
     if (status < EXIT_WARNINGS) status = EXIT_WARNINGS;
@@ -236,9 +231,12 @@ static void zzip_mem_entry_direntry(ZZIP_MEM_ENTRY* entry)
     if (*name == '\n') name++;
 
     if (option_verbose) {
+	long percentage;
+
+	percentage = usize ? (L (100 - (csize*100/usize))) : 0;	/* 0% if file size is 0 */
 	printf("%8li%c %s %8li%c%3li%%  %s  %8lx  %s %s\n", 
 	       L usize, exp, comprlevel[compr], L csize, exp, 
-	       L (100 - (csize*100/usize)),
+	       percentage,
 	       _zzip_ctime(&mtime), crc32, name, comment);
     } else {
 	printf(" %8li%c %s   %s %s\n", 

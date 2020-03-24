@@ -14,6 +14,11 @@
 #include <zzip/__debug.h>
 #include <zzip/__fnmatch.h>
 #include "unzzipcat-zip.h"
+#include "unzzip-states.h"
+
+/* Functions in unzzip.c: */
+extern int exitcode(int);
+extern FILE* create_fopen(char*, char*, int);
 
 static void unzzip_big_entry_fprint(ZZIP_ENTRY* entry, FILE* out)
 {
@@ -77,13 +82,14 @@ static FILE* create_fopen(char* name, const char* mode, int subdirs)
 
 static int unzzip_cat (int argc, char ** argv, int extract)
 {
+    int done = 0;
     int argn;
     FILE* disk;
 
-    disk = fopen (argv[1], "r");
+    disk = fopen (argv[1], "rb");
     if (! disk) {
 	perror(argv[1]);
-	return -1;
+	return exitcode(errno);
     }
 
     if (argc == 2)
@@ -93,12 +99,20 @@ static int unzzip_cat (int argc, char ** argv, int extract)
 	{
 	    char* name = zzip_entry_strdup_name (entry);
 	    FILE* out = stdout;
-	    if (extract) out = create_fopen(name, "w", 1);
+	    if (! name) {
+	        done = EXIT_WARNINGS;
+	        continue;
+	    }
+	    if (extract) out = create_fopen(name, "wb", 1);
+	    if (! out) {
+	        if (errno != EISDIR) done = EXIT_ERRORS;
+	        continue;
+	    }
 	    unzzip_cat_file (disk, name, out);
 	    if (extract) fclose(out);
 	    free (name);
 	}
-	return 0;
+	return done;
     }
 
     if (argc == 3 && !extract)
@@ -119,14 +133,14 @@ static int unzzip_cat (int argc, char ** argv, int extract)
 	    char* name = zzip_entry_strdup_name (entry);
 	    DBG3(".. check '%s' to zip '%s'", argv[argn], name);
 	    if (! _zzip_fnmatch (argv[argn], name, 
-#ifdef ZZIP_HAVE_FNMATCH_H
-			FNM_NOESCAPE | FNM_PATHNAME | FNM_PERIOD))
-#else
-			0))
-#endif
+		_zzip_FNM_NOESCAPE|_zzip_FNM_PATHNAME|_zzip_FNM_PERIOD))
 	    {
 	        FILE* out = stdout;
-	        if (extract) out = create_fopen(name, "w", 1);
+	        if (extract) out = create_fopen(name, "wb", 1);
+		if (! out) {
+		    if (errno != EISDIR) done = EXIT_ERRORS;
+		    continue;
+		}
 		unzzip_cat_file (disk, name, out);
 		if (extract) fclose(out);
 		break; /* match loop */
@@ -134,7 +148,7 @@ static int unzzip_cat (int argc, char ** argv, int extract)
 	    free (name);
 	}
     }
-    return 0;
+    return done;
 } 
 
 int unzzip_print (int argc, char ** argv)
